@@ -1,71 +1,72 @@
-const apiUrl = 'https://script.google.com/macros/s/AKfycby4LYUuc0aed9UsS6BDwBXitoLLUKp2Wzy2RSaaODfb4oStNaZMY1yR0l_XNdFKAGCS/exec'
+const apiUrl =
+  'https://script.google.com/macros/s/AKfycby4LYUuc0aed9UsS6BDwBXitoLLUKp2Wzy2RSaaODfb4oStNaZMY1yR0l_XNdFKAGCS/exec'
 
 class SecretSantaClient {
   constructor(apiUrl) {
-    this.apiUrl = apiUrl;
-    this.sessionToken = localStorage.getItem('santa_session');
+    this.apiUrl = apiUrl
+    this.sessionToken = localStorage.getItem('santa_session')
   }
-  
-  async register(name, password, description='') {
+
+  async register(name, password, description = '') {
     const response = await fetch(this.apiUrl, {
       method: 'POST',
       mode: 'no-cors', // или 'cors' если настроено
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         action: 'register',
         name: name,
         password: password,
-        description: description
-      })
-    });
+        description: description,
+      }),
+    })
     const test = await response.text()
-    console.log('response.text(): ',test)
-    console.log('raw: ',response)
-    return response.json();
+    console.log('response.text(): ', test)
+    console.log('raw: ', response)
+    return response.json()
   }
-  
+
   async login(name, password) {
     const response = await fetch(this.apiUrl, {
       method: 'POST',
       body: JSON.stringify({
         action: 'login',
         name: name,
-        password: password
-      })
-    });
-    const result = await response.json();
+        password: password,
+      }),
+    })
+    const result = await response.json()
     if (result.success) {
-      this.sessionToken = result.sessionToken;
-      localStorage.setItem('santa_session', result.sessionToken);
+      this.sessionToken = result.sessionToken
+      localStorage.setItem('santa_session', result.sessionToken)
     }
-    return result;
+    return result
   }
-  
+
   async getWard() {
     if (!this.sessionToken) {
-      throw new Error('Необходима авторизация');
+      throw new Error('Необходима авторизация')
     }
-    
+
     const response = await fetch(this.apiUrl, {
       method: 'POST',
       body: JSON.stringify({
         action: 'get_ward',
-        sessionToken: this.sessionToken
-      })
-    });
-    return response.json();
+        sessionToken: this.sessionToken,
+      }),
+    })
+    return response.json()
   }
-  
+
   logout() {
-    localStorage.removeItem('santa_session');
-    this.sessionToken = null;
+    localStorage.removeItem('santa_session')
+    this.sessionToken = null
   }
 }
 
 // Использование
-const client = new SecretSantaClient(apiUrl);
+const client = new SecretSantaClient(apiUrl)
 export default client
 
 // // Регистрация

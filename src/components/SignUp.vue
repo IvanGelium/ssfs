@@ -1,54 +1,63 @@
 <script setup lang="ts">
-import { ref, } from 'vue';
-import client from '../clients' 
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
+import { ref } from 'vue'
+import client from '../clients'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 const formData = ref(null)
-async function sendSignUp(formData:any) {
-const test = await fetch('/.netlify/functions/register', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    name: formData.name,
-    password: formData.pass,
-    description: formData.desc
+async function sendSignUp(formData: any) {
+  if (!formData.name || !formData.pass) {
+    toast('Буквы напиши дурак.', {
+      theme: 'auto',
+      type: 'error',
+      dangerouslyHTMLString: true,
+    })
+    return
+  }
+  const test = await fetch('/.netlify/functions/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: formData.name,
+      password: formData.pass,
+      description: formData.desc,
+    }),
   })
-})
-const test2 = await test.json()
-console.log(test2)
-if (test2.message === 'Регистрация успешна')
-toast("Зарегистрировался? Теперь пиздуй отсюда.", {
-  "theme": "auto",
-  "type": "default",
-  "dangerouslyHTMLString": true
-})
-else {
-  toast("Ты где-то нафакапил.", {
-  "theme": "auto",
-  "type": "error",
-  "dangerouslyHTMLString": true
-})
-}
-
+  const test2 = await test.json()
+  console.log(test2)
+  if (test2.message === 'Регистрация успешна')
+    toast('Зарегистрировался? Теперь пиздуй отсюда.', {
+      theme: 'auto',
+      type: 'default',
+      dangerouslyHTMLString: true,
+    })
+  else {
+    toast('Ты где-то нафакапил.', {
+      theme: 'auto',
+      type: 'error',
+      dangerouslyHTMLString: true,
+    })
+  }
 }
 
 const emit = defineEmits<{
-  (e: 'change', viewState:'signup'|'login'): void
+  (e: 'change', viewState: 'signup' | 'login'): void
 }>()
-
-
 </script>
 
 <template>
   <div class="wholeForm">
-    <h2 @click="$emit('change','login')" style="margin-bottom: 1rem;" class="formHeader">Я новенький >>></h2>
-    <Vueform class="sss"  v-model="formData">
-        <TextElement  name="name" label="Имя" placeholder="СусПроцСветлыйМинпо" />
-        <TextElement  name="pass" label="Пароль" placeholder="******" />
-        <TextareaElement  name="desc" label="Письмо Деду Морозу" placeholder="Я хорошо себя вел..." />
-        <ButtonElement type="submit" @click="sendSignUp(formData)" :name="'sbmBtn'">Отправить</ButtonElement>
+    <h2 @click="$emit('change', 'login')" style="margin-bottom: 1rem" class="formHeader">
+      Я новенький >>>
+    </h2>
+    <Vueform class="sss" v-model="formData">
+      <TextElement name="name" label="Имя" placeholder="СусПроцСветлыйМинпо" />
+      <TextElement name="pass" label="Пароль" placeholder="******" />
+      <TextareaElement name="desc" label="Письмо Деду Морозу" placeholder="Я хорошо себя вел..." />
+      <ButtonElement type="submit" @click="sendSignUp(formData)" :name="'sbmBtn'"
+        >Отправить</ButtonElement
+      >
     </Vueform>
   </div>
 </template>
@@ -64,15 +73,14 @@ const emit = defineEmits<{
 }
 .formHeader:hover {
   background-color: #aaa;
-  color: black
+  color: black;
 }
 
 .wholeForm {
   padding: 2rem;
 }
 
-.buttonForSure { 
+.buttonForSure {
   /* border: 2px solid #111;  */
 }
-
 </style>
