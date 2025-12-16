@@ -1,6 +1,5 @@
 
-exports.register = async function (event, context) {
-  // URL вашего Google Apps Script
+exports.handler = async function (event, context) {
 
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby4LYUuc0aed9UsS6BDwBXitoLLUKp2Wzy2RSaaODfb4oStNaZMY1yR0l_XNdFKAGCS/exec'
 
