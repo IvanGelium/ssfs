@@ -2,10 +2,18 @@
 import { ref } from 'vue';
 import client from '../clients' 
 const formData = ref(null)
-async function sendSignUp(formData) {
-  console.log(formData)
-  const response =await client.register(formData.name, formData.pass)
-  console.log(response)
+async function sendSignUp(formData:any) {
+  // console.log(formData)
+  // const response =await client.register(formData.name, formData.pass)
+  // console.log(response)
+const test = await fetch('/.netlify/functions/register', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(formData)
+})
+console.log(test)
 }
 
 </script>
