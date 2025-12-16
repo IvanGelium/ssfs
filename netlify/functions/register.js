@@ -12,7 +12,10 @@ exports.handler = async function (event, context) {
     const response = await fetch(SCRIPT_URL, {
       method: 'POST',
       headers: headers,
-      body: event.body,
+      body: {
+        action: 'register',
+        ...event.body
+      },
     });
 
     const data = await response.text();
