@@ -92,15 +92,16 @@ function updateCurrentUser(data) {
       <TopHeader></TopHeader>
       <div v-if="!currentUser" class="formsContainer">
         <div v-if="viewState === 'signup'">
-          <SignUp @auth="(data)=>updateCurrentUser(data)" @change="(status) => toggleView(status)"></SignUp>
+          <SignUp @auth="(data) => {
+  updateCurrentUser(data)
+            console.log('hit')
+          }" @change="(status) => toggleView(status)"></SignUp>
         </div>
         <div v-if="viewState === 'login'">
           <Auth @change="(status) => toggleView(status)" :is-time="isTime"></Auth>
         </div>
       </div>
       <div v-else>
-   
-
         <h2>{{ currentUser.userName }}</h2>
         <h2>{{ currentUser.ward }}</h2>
       </div>

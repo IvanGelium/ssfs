@@ -28,7 +28,7 @@ async function sendLogin(formData) {
     }),
   })
   const data = await test.json()
-  console.log(data)
+  console.log('fetch-data',data)
   if (data.sessionToken) { 
     emit('auth',data)
   toast('Вошел? Ну молодец, заходи.', {
