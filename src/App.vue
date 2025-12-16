@@ -56,6 +56,12 @@ onMounted(() => {
       document.addEventListener('click', startOnClick)
     })
 })
+// const currentUser = ref({
+//   userName: 'test',
+//   userId: '1',
+//   hasAssignment: false,
+//   ward:null
+// })
 const currentUser = ref(null)
 
 
@@ -73,7 +79,9 @@ function toggleView(status) {
 }
 
 function updateCurrentUser(data) {
+  console.log('data',data)
   currentUser.value = data
+  console.log('currentUser',currentUser.value)
 }
 
 </script>
@@ -91,9 +99,10 @@ function updateCurrentUser(data) {
         </div>
       </div>
       <div v-else>
-        {{ data.userId, data,userName, data.hasAssignment,  data.ward}}
+   
 
-        test
+        <h2>{{ currentUser.userName }}</h2>
+        <h2>{{ currentUser.ward }}</h2>
       </div>
     </div>
   </div>
