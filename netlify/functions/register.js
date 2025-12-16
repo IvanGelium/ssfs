@@ -8,14 +8,31 @@ exports.handler = async function (event, context) {
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Content-Type': 'application/json'
   };
+
+  let clientData = {};
+  if (event.body) {
+    try {
+      clientData = JSON.parse(event.body);
+      console.log('📥 Client data parsed:', clientData);
+    } catch (e) {
+      console.log('⚠️ Client data not JSON:', event.body);
+      clientData = { raw: event.body };
+    }
+  }
+
+  const requestBody = {
+    action: 'register',
+    timestamp: new Date().toISOString(),
+    source: 'netlify-proxy',
+    ...clientData // Распаковываем данные от клиента
+  };
+
+
   try {
     const response = await fetch(SCRIPT_URL, {
       method: 'POST',
       headers: headers,
-      body: {
-        action: 'register',
-        ...event.body
-      },
+      body: JSON.stringify(requestBody),
     });
 
     const data = await response.text();
