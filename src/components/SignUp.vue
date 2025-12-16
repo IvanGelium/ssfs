@@ -13,7 +13,8 @@ const test = await fetch('/.netlify/functions/register', {
   },
   body: JSON.stringify(formData)
 })
-console.log(test)
+const test2 = await test.json()
+console.log(test2)
 }
 
 </script>
