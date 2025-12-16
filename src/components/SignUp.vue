@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import client from '../clients' 
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 const formData = ref(null)
 async function sendSignUp(formData:any) {
   // console.log(formData)
@@ -17,8 +19,12 @@ const test = await fetch('/.netlify/functions/register', {
     description: formData.desc
   })
 })
-const test2 = await test.json()
-console.log(test2)
+toast("Зарегистрировался? Теперь пиздуй отсюда.", {
+  "theme": "auto",
+  "type": "default",
+  "dangerouslyHTMLString": true
+})
+
 }
 
 </script>
