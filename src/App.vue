@@ -56,26 +56,8 @@ onMounted(() => {
       document.addEventListener('click', startOnClick)
     })
 })
+const currentUser = ref(null)
 
-const toggleMusic = () => {
-  if (!audio) return
-
-  if (isPlaying.value) {
-    audio.pause()
-    isPlaying.value = false
-    console.log('⏸️ Музыка остановлена')
-  } else {
-    audio
-      .play()
-      .then(() => {
-        isPlaying.value = true
-        console.log('▶️ Музыка запущена')
-      })
-      .catch((error) => {
-        console.error('❌ Ошибка запуска:', error)
-      })
-  }
-}
 
 const backgroundUrl = new URL('./assets/img/bg-text.jpg', import.meta.url).href
 const backgroundStyle = computed(() => ({
@@ -86,14 +68,11 @@ const backgroundStyle = computed(() => ({
 }))
 const isTime = true
 const viewState = ref('signup')
-
-const currentUser = ref(null)
 function toggleView(status) {
   viewState.value = status
 }
 
 function updateCurrentUser(data) {
-  sessionToken.value = data.sessionToken
   currentUser.value = data
 }
 
@@ -103,7 +82,7 @@ function updateCurrentUser(data) {
   <div class="bg-root" :style="backgroundStyle">
     <div class="contentCenter">
       <TopHeader></TopHeader>
-      <div v-if="!sessionToken" class="formsContainer">
+      <div v-if="!currentUser" class="formsContainer">
         <div v-if="viewState === 'signup'">
           <SignUp @auth="(data)=>updateCurrentUser(data)" @change="(status) => toggleView(status)"></SignUp>
         </div>
@@ -113,6 +92,8 @@ function updateCurrentUser(data) {
       </div>
       <div v-else>
         {{ data.userId, data,userName, data.hasAssignment,  data.ward}}
+
+        test
       </div>
     </div>
   </div>
