@@ -56,13 +56,13 @@ onMounted(() => {
       document.addEventListener('click', startOnClick)
     })
 })
-const currentUser = ref({
-  userName: 'test',
-  userId: '1',
-  hasAssignment: false,
-  ward:null
-})
-// const currentUser = ref(null)
+// const currentUser = ref({
+//   userName: 'test',
+//   userId: '1',
+//   hasAssignment: false,
+//   ward:null
+// })
+const currentUser = ref(null)
 
 
 const backgroundUrl = new URL('./assets/img/bg-text.jpg', import.meta.url).href
