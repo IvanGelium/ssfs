@@ -7,8 +7,10 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite ",
+    "dev:build": "vite ./dist",
     "build": "run-p type-check \"build-only {@}\" --",
+    "build:force": "tsc --noEmit --skipLibCheck && vite build",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
