@@ -1,11 +1,79 @@
 <script setup lang="ts">
 // import { RouterLink, RouterView } from 'vue-router'
 // import HelloWorld from './components/HelloWorld.vue'
-import { ref } from 'vue'
 import TopHeader from './components/Header.vue'
 import SignUp from './components/SignUp.vue'
 import Auth from './components/Auth.vue'
-import { computed } from 'vue'
+import { onMounted,ref , computed} from 'vue';
+let audio = null;
+const isPlaying = ref(false);
+
+onMounted(() => {
+  // 1. Создаем Audio элемент ПРАВИЛЬНО
+  audio = new Audio();
+  
+  // 2. Устанавливаем источник
+  audio.src = '/music/output.ogg';
+  
+  // 3. Настройки
+  audio.volume = 0.2;
+  audio.loop = true;
+  audio.preload = 'auto';
+  
+  // 4. События для отладки
+  audio.addEventListener('loadeddata', () => {
+    console.log('✅ Аудио загружено, готово к воспроизведению');
+  });
+  
+  audio.addEventListener('error', (e) => {
+    console.error('❌ Ошибка аудио:', e.target.error);
+  });
+  
+  audio.addEventListener('canplaythrough', () => {
+    console.log('✅ Аудио полностью загружено');
+  });
+  
+  // 5. Пытаемся автозапустить
+  audio.play()
+    .then(() => {
+      console.log('✅ Автозапуск успешен');
+      isPlaying.value = true;
+    })
+    .catch(error => {
+      console.log('⚠️ Автозапуск заблокирован. Кликните по странице.');
+      
+      // Автозапуск при первом клике
+      const startOnClick = () => {
+        audio.play().then(() => {
+          isPlaying.value = true;
+          console.log('✅ Музыка запущена после клика');
+        });
+        document.removeEventListener('click', startOnClick);
+      };
+      
+      document.addEventListener('click', startOnClick);
+    });
+});
+
+const toggleMusic = () => {
+  if (!audio) return;
+  
+  if (isPlaying.value) {
+    audio.pause();
+    isPlaying.value = false;
+    console.log('⏸️ Музыка остановлена');
+  } else {
+    audio.play()
+      .then(() => {
+        isPlaying.value = true;
+        console.log('▶️ Музыка запущена');
+      })
+      .catch(error => {
+        console.error('❌ Ошибка запуска:', error);
+      });
+  }
+};
+
 const backgroundUrl = new URL('./assets/img/bg-text.jpg', import.meta.url).href
 const backgroundStyle = computed(() => ({
   backgroundImage: `url(${backgroundUrl})`,
@@ -17,6 +85,9 @@ const isTime = false
 const viewState = ref('signup')
 
 const currentUser = ref(null)
+function toggleView(status) {
+  viewState.value = status
+}
 </script>
 
 <template>
@@ -25,79 +96,16 @@ const currentUser = ref(null)
       <TopHeader></TopHeader>
       <div class="formsContainer">
         <div v-if="viewState ==='signup'">
-          <SignUp></SignUp>
+          <SignUp @change="(status)=>toggleView(status)"></SignUp>
         </div>
-        <div v-if="viewState ==='auth'">
-          <Auth :is-time="isTime"></Auth>
+        <div v-if="viewState ==='login'">
+          <Auth @change="(status)=>toggleView(status)" :is-time="isTime"></Auth>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<!-- <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style> -->
 <style>
 .bg-root {
   display: flex;
