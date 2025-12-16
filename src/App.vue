@@ -1,13 +1,14 @@
 <script setup lang="ts">
 // import { RouterLink, RouterView } from 'vue-router'
 // import HelloWorld from './components/HelloWorld.vue'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 import TopHeader from './components/Header.vue'
 import SignUp from './components/SignUp.vue'
 import Auth from './components/Auth.vue'
 import { onMounted, ref, computed } from 'vue'
 let audio = null
 const isPlaying = ref(false)
-const sessionToken = ref<string|null>(null)
 onMounted(() => {
   // sessionToken.value = localStorage.getItem('santa_session');
   // 1. Создаем Audio элемент ПРАВИЛЬНО
@@ -85,6 +86,14 @@ function updateCurrentUser(data) {
 }
 
 async function getWard(token) {
+    
+     toast('Грузим...', {
+      theme: 'auto',
+      type: 'default',
+      dangerouslyHTMLString: true,
+    })
+  
+
    const test = await fetch('/.netlify/functions/getWard', {
     method: 'POST',
     headers: {
@@ -97,8 +106,7 @@ async function getWard(token) {
   const data = await test.json()
   console.log('fetch-data',data)
   if (data.sessionToken) { 
-    emit('auth',data)
-  toast('Вошел? Ну молодец, заходи.', {
+  toast('Ваш подопечный', {
     theme: 'auto',
     type: 'default',
     dangerouslyHTMLString: true,

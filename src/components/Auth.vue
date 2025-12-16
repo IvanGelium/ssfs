@@ -17,6 +17,13 @@ async function sendLogin(formData) {
     })
     return
   }
+  else {
+     toast('Грузим...', {
+      theme: 'auto',
+      type: 'default',
+      dangerouslyHTMLString: true,
+    })
+  }
   const test = await fetch('/.netlify/functions/login', {
     method: 'POST',
     headers: {

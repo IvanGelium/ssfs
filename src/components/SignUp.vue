@@ -13,6 +13,13 @@ async function sendSignUp(formData: any) {
     })
     return
   }
+    else {
+     toast('Грузим...', {
+      theme: 'auto',
+      type: 'default',
+      dangerouslyHTMLString: true,
+    })
+  }
   const test = await fetch('/.netlify/functions/register', {
     method: 'POST',
     headers: {
