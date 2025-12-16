@@ -56,13 +56,13 @@ onMounted(() => {
       document.addEventListener('click', startOnClick)
     })
 })
-// const currentUser = ref({
-//   userName: 'test',
-//   userId: '1',
-//   hasAssignment: false,
-//   ward:null
-// })
-const currentUser = ref(null)
+const currentUser = ref({
+  userName: 'test',
+  userId: '1',
+  hasAssignment: false,
+  ward:null
+})
+// const currentUser = ref(null)
 
 
 const backgroundUrl = new URL('./assets/img/bg-text.jpg', import.meta.url).href
@@ -84,6 +84,35 @@ function updateCurrentUser(data) {
   console.log('currentUser',currentUser.value)
 }
 
+async function getWard(token) {
+   const test = await fetch('/.netlify/functions/getWard', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      sessionToken:token
+    }),
+  })
+  const data = await test.json()
+  console.log('fetch-data',data)
+  if (data.sessionToken) { 
+    emit('auth',data)
+  toast('Вошел? Ну молодец, заходи.', {
+    theme: 'auto',
+    type: 'default',
+    dangerouslyHTMLString: true,
+  })
+}
+  else {
+    toast('Ты где-то нафакапил.', {
+      theme: 'auto',
+      type: 'error',
+      dangerouslyHTMLString: true,
+    })
+  }
+} 
+
 </script>
 
 <template>
@@ -102,9 +131,10 @@ function updateCurrentUser(data) {
           }"  @change="(status) => toggleView(status)" :is-time="isTime"></Auth>
         </div>
       </div>
-      <div v-else>
-        <h2>{{ currentUser.userName }}</h2>
-        <h2>{{ currentUser.ward }}</h2>
+      <div v-else class="authCont">
+        <h2>Санта: {{ currentUser.userName }}</h2>
+        <h2>Подопченый: {{ currentUser.ward? 'Есть':'Нет' }}</h2>
+        <button @click="getWard(currentUser.sessionToken)"  class="getWardButton" >{{ currentUser.ward? 'Я забыл кто мой подопечный':'Получить подопечного' }}</button>
       </div>
     </div>
   </div>
@@ -127,5 +157,22 @@ function updateCurrentUser(data) {
 }
 .formsContainer {
   /* border: 1px solid red; */
+}
+
+.authCont {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap:0.5rem
+}
+
+.getWardButton{
+  margin-top: 1rem;
+  font-weight: bolder;
+  color: white;
+  font-size: 1rem;
+  padding: 1rem;
+  background-color: green;
+  border-radius: 0.5rem;
 }
 </style>
