@@ -64,7 +64,7 @@ onMounted(() => {
 //   ward:null
 // })
 const currentUser = ref(null)
-
+const currentWard = ref(null)
 
 const backgroundUrl = new URL('./assets/img/bg-text.jpg', import.meta.url).href
 const backgroundStyle = computed(() => ({
@@ -105,7 +105,8 @@ async function getWard(token) {
   })
   const data = await test.json()
   console.log('fetch-data',data)
-  if (data.sessionToken) { 
+  if (data.success) { 
+    currentWard.value = data.ward
   toast('Ваш подопечный', {
     theme: 'auto',
     type: 'default',
@@ -142,7 +143,9 @@ async function getWard(token) {
       <div v-else class="authCont">
         <h2>Санта: {{ currentUser.userName }}</h2>
         <h2>Подопченый: {{ currentUser.ward? 'Есть':'Нет' }}</h2>
-        <button @click="getWard(currentUser.sessionToken)"  class="getWardButton" >{{ currentUser.ward? 'Я забыл кто мой подопечный':'Получить подопечного' }}</button>
+        <button v-if="!currentWard" @click="getWard(currentUser.sessionToken)"  class="getWardButton" >{{ currentUser.ward? 'Я забыл кто мой подопечный':'Получить подопечного' }}</button>
+        <h1 style="padding: 1rem;" v-if="currentWard">{{currentWard.name }}</h1>
+        <h3  v-if="currentWard">{{ currentWard.description }}</h3>
       </div>
     </div>
   </div>
