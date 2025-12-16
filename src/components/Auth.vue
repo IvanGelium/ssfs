@@ -13,9 +13,9 @@ const test = await fetch('/.netlify/functions/login', {
     password: formData.pass,
   })
 })
-
-console.log(test)
-if (test.message === 'Регистрация успешна')
+const test2 = await test.json()
+console.log(test2)
+if (test2.message === 'Регистрация успешна')
 toast("Зарегистрировался? Теперь пиздуй отсюда.", {
   "theme": "auto",
   "type": "default",

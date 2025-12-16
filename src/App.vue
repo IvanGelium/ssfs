@@ -81,7 +81,7 @@ const backgroundStyle = computed(() => ({
   backgroundPosition: 'center',
   minHeight: '100vh',
 }))
-const isTime = false
+const isTime = true
 const viewState = ref('signup')
 
 const currentUser = ref(null)
