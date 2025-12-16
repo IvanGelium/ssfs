@@ -11,7 +11,11 @@ const test = await fetch('/.netlify/functions/register', {
   headers: {
     'Content-Type': 'application/json',
   },
-  body: JSON.stringify(formData)
+  body: JSON.stringify({
+    name: formData.name,
+    password: formData.pass,
+    description: formData.desc
+  })
 })
 const test2 = await test.json()
 console.log(test2)
@@ -25,6 +29,7 @@ console.log(test2)
     <Vueform  v-model="formData">
         <TextElement  name="name" label="Имя" placeholder="СусПроцСветлыйМинпо" />
         <TextElement  name="pass" label="Пароль" placeholder="******" />
+        <TextareaElement  name="desc" label="Письмо Деду Морозу" placeholder="Я хорошо себя вел..." />
         <ButtonElement type="submit" @click="sendSignUp(formData)" :name="'sbmBtn'">Отправить</ButtonElement>
     </Vueform>
   </div>
