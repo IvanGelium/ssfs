@@ -92,8 +92,9 @@ function toggleView(status) {
   viewState.value = status
 }
 
-function updateToken(token) {
-  sessionToken.value = token
+function updateCurrentUser(data) {
+  sessionToken.value = data.sessionToken
+  currentUser.value = data
 }
 
 </script>
@@ -104,11 +105,14 @@ function updateToken(token) {
       <TopHeader></TopHeader>
       <div v-if="!sessionToken" class="formsContainer">
         <div v-if="viewState === 'signup'">
-          <SignUp @auth="(token)=>updateToken(token)" @change="(status) => toggleView(status)"></SignUp>
+          <SignUp @auth="(data)=>updateCurrentUser(data)" @change="(status) => toggleView(status)"></SignUp>
         </div>
         <div v-if="viewState === 'login'">
           <Auth @change="(status) => toggleView(status)" :is-time="isTime"></Auth>
         </div>
+      </div>
+      <div v-else>
+        {{ data.userId, data,userName, data.hasAssignment,  data.ward}}
       </div>
     </div>
   </div>

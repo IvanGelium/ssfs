@@ -5,7 +5,7 @@ import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 const emit = defineEmits<{
   (e: 'change', viewState: 'signup' | 'login'): void
-  (e: 'auth', sessionToken: string): void
+  (e: 'auth', data: any): void
 }>()
 const formData = ref(null)
 async function sendLogin(formData) {
@@ -27,9 +27,10 @@ async function sendLogin(formData) {
       password: formData.pass,
     }),
   })
-  const test2 = await test.json()
-  console.log(test2)
-  if (test2.sessionToken) { 
+  const data = await test.json()
+  console.log(data)
+  if (data.sessionToken) { 
+    emit('auth',data)
   toast('Вошел? Ну молодец, заходи.', {
     theme: 'auto',
     type: 'default',
