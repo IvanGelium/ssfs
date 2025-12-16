@@ -7,8 +7,9 @@ import Auth from './components/Auth.vue'
 import { onMounted, ref, computed } from 'vue'
 let audio = null
 const isPlaying = ref(false)
-
+const sessionToken = ref<string|null>(null)
 onMounted(() => {
+  // sessionToken.value = localStorage.getItem('santa_session');
   // 1. Создаем Audio элемент ПРАВИЛЬНО
   audio = new Audio()
 
@@ -90,15 +91,20 @@ const currentUser = ref(null)
 function toggleView(status) {
   viewState.value = status
 }
+
+function updateToken(token) {
+  sessionToken.value = token
+}
+
 </script>
 
 <template>
   <div class="bg-root" :style="backgroundStyle">
     <div class="contentCenter">
       <TopHeader></TopHeader>
-      <div class="formsContainer">
+      <div v-if="!sessionToken" class="formsContainer">
         <div v-if="viewState === 'signup'">
-          <SignUp @change="(status) => toggleView(status)"></SignUp>
+          <SignUp @auth="(token)=>updateToken(token)" @change="(status) => toggleView(status)"></SignUp>
         </div>
         <div v-if="viewState === 'login'">
           <Auth @change="(status) => toggleView(status)" :is-time="isTime"></Auth>
