@@ -6,7 +6,7 @@ async function sendSignUp(formData:any) {
   // console.log(formData)
   // const response =await client.register(formData.name, formData.pass)
   // console.log(response)
-const test = await fetch('/.netlify/functions/register', {
+const test = await fetch('netlify/functions/register', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
